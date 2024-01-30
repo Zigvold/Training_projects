@@ -9,7 +9,19 @@
 Текст на русском
 <div th:each="book : ${books}">
     <a th:href="@{/books/{id}(id = ${book.getId()})}" th:text="${book.getTitle()}">Tile of the book</a>
-</div><br><hr><br>
+</div>
+<hr>
+<div th:if="${paging}==true and ${page}==0">
+    <form th:action="@{/books}" method="GET">
+
+        <input  th:name="paging" th:value="${paging}">
+        <input th:name="page" th:value="${page+1}">
+        <input th:name="sort_by_year" th:value="${sort_by_year}">
+        <input th:name="books_per_page" th:value="${books_per_page}">
+        <input type="submit" value="Перейти на следующую страницу">
+    </form>
+</div>
+<hr>
 <form th:action="@{/books/new}" th:method="GET">
     <input type="submit" value="Create a new book">
 </form>

@@ -1,12 +1,15 @@
 package ru.daniil.app.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.daniil.app.models.Book;
 import ru.daniil.app.models.Person;
 import ru.daniil.app.repositories.BooksRepository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,20 @@ public class BooksService {
     public List<Book> findAll(){
         return booksRepository.findAll();
     }
+
+    public List<Book> findAll(boolean paging, int booksPerPage,int page, boolean sortByYear){
+        if (paging & sortByYear)
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("yearOfProduction"))).getContent();
+         else if (paging)
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+         else if (sortByYear)
+             return booksRepository.findAll(Sort.by("yearOfProduction"));
+         else return findAll();
+    }
+
+//    public List<Book> findAll(int page, int booksPerPage){
+//        return
+//    }
 
     public Book findOne(int id){
         Optional<Book> target = booksRepository.findById(id);

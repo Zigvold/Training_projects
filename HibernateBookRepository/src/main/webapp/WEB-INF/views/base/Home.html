@@ -9,8 +9,35 @@
 <form th:action="@{/people}" th:method="GET">
   <input value="Go to people index page" type="submit">
 </form>
+<!--<hr>-->
+<!--<form th:action="@{/books}" th:method="GET">-->
+<!--  <input value="Go to books index page " type="submit">-->
+<!--</form>-->
+<hr>
 <form th:action="@{/books}" th:method="GET">
-  <input value="Go to books index page " type="submit">
+    <span>Переход на список книг и параметры для него</span>
+    <br>
+    <label for="books_per_page">Количество книг в странице</label>
+    <select id="books_per_page" th:name="books_per_page">
+        <option th:value="4">4</option>
+        <option th:value="5">5</option>
+        <option th:value="6">6</option>
+    </select>
+    <br>
+    <label for="paging">Пагинация</label>
+    <select id="paging" th:name="paging">
+        <option th:value="false">Отсутствует</option>
+        <option th:value="true">Присутствует</option>
+    </select>
+    <br>
+    <label for="sort">Сортировка</label>
+    <select id="sort" th:name="sort_by_year">
+        <option th:value="false">Отсутствует</option>
+        <option th:value="true">Присутствует</option>
+    </select>
+    <br>
+    <input type="submit" value="отправить">
 </form>
+
 </body>
 </html>
