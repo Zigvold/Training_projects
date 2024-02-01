@@ -2,22 +2,46 @@ package ru.daniil.springcourse.FirstSecurityApp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.daniil.springcourse.FirstSecurityApp.security.AuthProviderImpl;
+import org.springframework.security.web.SecurityFilterChain;
+import ru.daniil.springcourse.FirstSecurityApp.services.PersonDetailsService;
 
+
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final PersonDetailsService personDetailsService;
 
     @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider, UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(PersonDetailsService personDetailsService) {
+        this.personDetailsService = personDetailsService;
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder encoder){
+        return personDetailsService;
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("first/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("people/**").authenticated())
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .build();
+
     }
 }
