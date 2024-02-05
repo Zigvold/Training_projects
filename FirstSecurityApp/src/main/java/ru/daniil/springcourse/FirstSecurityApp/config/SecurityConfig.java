@@ -31,17 +31,27 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("first/**").permitAll())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("people/**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/registration").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/login").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/login/error").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/auth/login?error").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/first**").permitAll())
+                .authorizeHttpRequests(auth-> auth.requestMatchers("/people**").authenticated())
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/process_login")
+                        .defaultSuccessUrl("/first", true)
+                        .failureUrl("/auth/login?error"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/auth/login"))
                 .build();
-        return null;
     }
 }
