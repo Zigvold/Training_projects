@@ -1,4 +1,5 @@
-package ru.daniil.app;
+package ru.daniil.app.test;
 
 public class MyLinkedList {
+    private MyLinkedList(){}
 }

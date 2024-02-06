@@ -16,11 +16,11 @@ public class PersonDetailsService implements UserDetailsService {
 
     private final PeopleRepository peopleRepository;
 
-
     @Autowired
     public PersonDetailsService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
