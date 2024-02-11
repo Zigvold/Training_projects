@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
     @Table(name = "Person")
@@ -26,9 +27,16 @@ import jakarta.validation.constraints.Size;
         @Column(name = "email")
         private String email;
 
-        public Person() {
+        @Column(name = "updated_who")
+        private String updatedWho;
 
-        }
+        @Column(name = "created_at")
+        private LocalDateTime createdAt;
+
+        @Column(name = "updated_at")
+        private LocalDateTime updatedAt;
+
+        public Person() {}
 
         public Person(String name, int age) {
             this.name = name;
@@ -47,7 +55,19 @@ import jakarta.validation.constraints.Size;
             return name;
         }
 
-        public void setName(String name) {
+    public String getUpdatedWho() {
+        return updatedWho;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setName(String name) {
             this.name = name;
         }
 
@@ -66,5 +86,17 @@ import jakarta.validation.constraints.Size;
         public void setEmail(String email) {
             this.email = email;
         }
+
+    public void setUpdatedWho(String updatedWho) {
+        this.updatedWho = updatedWho;
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}
 
