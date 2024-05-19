@@ -5,11 +5,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.flamehander.spring.securityjwt.dtos.RegistrationUserDto;
 import ru.flamehander.spring.securityjwt.models.User;
-import ru.flamehander.spring.securityjwt.repositories.RoleRepository;
 import ru.flamehander.spring.securityjwt.repositories.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,7 +19,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+
 
     Optional<User> findByUsername(String username){
         return userRepository.findByUsername(username);
@@ -34,6 +37,16 @@ public class UserService implements UserDetailsService {
                 user.getRoles().stream().map(role ->
                         new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
         );
+    }
+
+    public User createNewUser(RegistrationUserDto registrationUserDto){
+        User user = new User(
+                registrationUserDto.getUsername(),
+                registrationUserDto.getPassword(),
+                registrationUserDto.getEmail()
+        );
+        user.setRoles(List.of(roleService.findByName("USER_ROLE").get()));
+        return userRepository.save(user);
     }
 
 }
