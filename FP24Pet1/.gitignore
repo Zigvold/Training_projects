@@ -20,7 +20,6 @@ target/
 *.ipr
 .src/main/resources/application.properties
 .target
-.pom.xml
 
 ### NetBeans ###
 /nbproject/private/
