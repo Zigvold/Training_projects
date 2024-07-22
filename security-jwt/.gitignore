@@ -19,8 +19,7 @@ target/
 *.iml
 *.ipr
 *.HELP.md
-/target
-security-jwt/src/main/resources/application.properties
+./security-jwt/src/main/resources/application.properties
 
 ### NetBeans ###
 /nbproject/private/
