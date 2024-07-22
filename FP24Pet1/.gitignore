@@ -18,8 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
-/src/main/resources/application.properties
-/target
+.src/main/resources/application.properties
+.target
 pom.xml
 
 ### NetBeans ###
