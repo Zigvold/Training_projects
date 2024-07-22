@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Страница редактирования</h1>
+<form data-th-action="@{/products/{id}(id = ${product.getId()})}" data-th-method="PATCH" data-th-object="${product}">
+    <label>
+        Введите название товара :
+        <input data-th-field="*{title}" type="text">
+    </label>
+    <br>
+    <label>
+        Введите описание товара :
+        <input data-th-field="*{details}" type="text">
+    </label>
+    <br>
+    <input type="submit" value="Редактировать">
+</form>
+</body>
+</html>

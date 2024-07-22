@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница создания</title>
+</head>
+<body>
+<div data-th-if="${errors}">
+    <h2>Допущены ошибки</h2>
+    <ul>
+        <li data-th-each="error : ${errors}" data-th-text="${error}">
+            Текст ошибки
+        </li>
+    </ul>
+</div>
+<form method="post" data-th-action="@{/products/new}" data-th-object="${product}">
+    <label>
+        Введите название :<br>
+        <input data-th-field="*{title}" data-th-value="${payload?.getTitle()}">
+    </label>
+    <br>
+    <label>
+        Введите описание :<br>
+        <textarea th:field="*{details}" data-th-value="${payload?.getDetails()}"></textarea>
+    </label>
+    <br>
+    <input type="submit" value="Отправить">
+</form>
+</body>
+</html>

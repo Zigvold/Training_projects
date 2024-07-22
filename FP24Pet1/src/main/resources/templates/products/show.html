@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница товара</title>
+</head>
+<body>
+
+<strong>Страница товара</strong>
+<br>
+<hr>
+<p>Айди : <span data-th-text="${product.getId()}">Айди</span></p>
+<p>Название : <span data-th-text="${product.getTitle()}">Название_товара</span></p>
+<p>Описание : <textarea data-th-text="${product.getDetails()}">Описание</textarea></p>
+
+<form data-th-action="@{/products/index}" data-th-method="GET">
+  <input type="submit" value="На страницу списка">
+</form>
+<br>
+<form data-th-action="@{/products/{id}/edit(id=${product.getId()})}" data-th-method="GET">
+   <input type="submit" value="Страница редактирования">
+</form>
+<br>
+<form data-th-action="@{/products/delete/{id}(id=${product.getId()})}" th:method="DELETE" data-th-object="${product}">
+  <input type="submit" value="Удалить">
+</form>
+</body>
+</html>
