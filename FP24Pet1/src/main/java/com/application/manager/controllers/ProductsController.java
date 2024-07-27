@@ -1,7 +1,8 @@
 package com.application.manager.controllers;
 
+import com.application.manager.client.RestClientProductRestClient;
+import com.application.manager.controllers.payload.NewProductPayload;
 import com.application.manager.models.Product;
-import com.application.manager.services.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductsController {
 
-    private final ProductService productService;
+    private final RestClientProductRestClient client;
 
     @GetMapping("/index")
     public String getProductList(Model model){
-        model.addAttribute("products", productService.findAll());
-        System.out.println(productService.findAll());
+        model.addAttribute("products", client.findAll());
+        System.out.println(client.findAll());
         return "products/index";
     }
 
@@ -30,15 +31,15 @@ public class ProductsController {
         return "products/new";
     }
     @PostMapping("/new")
-    public String create(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult,
+    public String create(@Valid @ModelAttribute("product") NewProductPayload payload, BindingResult bindingResult,
                          Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("payload", product);
+            model.addAttribute("payload", payload);
             model.addAttribute("errors", bindingResult.getAllErrors()
                     .stream().map(ObjectError::getDefaultMessage).toList());
             return "products/new";
         } else {
-            productService.save(product);
+            client.createProduct(payload.title(), payload.details());
             return "redirect:index";
         }
     }

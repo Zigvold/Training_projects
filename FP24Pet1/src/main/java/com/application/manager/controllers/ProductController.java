@@ -1,7 +1,7 @@
 package com.application.manager.controllers;
 
+import com.application.manager.client.RestClientProductRestClient;
 import com.application.manager.models.Product;
-import com.application.manager.services.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -18,12 +18,12 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
+    private final RestClientProductRestClient client;
     private final MessageSource messageSource;
 
     @ModelAttribute("product")
     public Product product(@PathVariable("id") int id){
-        return productService.findById(id).orElseThrow(() ->
+        return client.findProduct(id).orElseThrow(() ->
                 new NoSuchElementException("catalogue.errors.product.not_found"));
     }
 
@@ -34,7 +34,7 @@ public class ProductController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@ModelAttribute("product") Product product){
-        productService.delete(product.getId());
+        client.deleteProduct(product.getId());
         return "redirect:/products/index";
     }
 
@@ -45,7 +45,7 @@ public class ProductController {
 
     @PatchMapping("/{id}")
     public String patch(@PathVariable("id") int id, @ModelAttribute("product") Product updatedProduct){
-        productService.update(updatedProduct);
+        client.updateProduct(id, updatedProduct.getTitle(), updatedProduct.getDetails());
         return "redirect:" + id;
     }
 
